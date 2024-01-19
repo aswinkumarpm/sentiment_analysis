@@ -1,0 +1,23 @@
+<!-- templates/yourappname/create_category.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Category</title>
+</head>
+<body>
+
+<h2>Create Category</h2>
+
+<form method="post" action="{% url 'create_category' %}">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Create Category</button>
+</form>
+
+<a href="{% url 'category_list' %}">Back to Category List</a>
+
+</body>
+</html>

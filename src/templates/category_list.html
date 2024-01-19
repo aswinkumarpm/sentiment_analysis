@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .category-list, .sentence-list, .form-container {
+            padding: 20px;
+        }
+
+        .category-card {
+
+        background-color:#85C1E9;
+
+        }
+
+        .category-list {
+background-color:#DCD7D6;
+        }
+
+        .category-card, .sentence-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+         .sentiment-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 category-list">
+            <h2>Categories</h2>
+
+            {% for category in categories %}
+            <div class="category-card" onclick="showSentences({{ category.id }})">
+                            <div class="d-flex justify-content-between align-items-center">
+
+                <span>{{ category.name }}</span>
+        <button><a href="{% url 'download_category_csv' category.name %}">Download CSV</a></button>
+
+            </div>
+            </div>
+
+            {% endfor %}
+            <a href="{% url 'create_category' %}">Create New Category</a>
+
+        </div>
+
+        <div class="col-md-8">
+
+            <div class="row">
+
+                <div class="col-md-6 sentence-list" id="sentence-list">
+                    {% for sentence in sentences %}
+                    <div class="sentence-card">
+                        {{ sentence }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-md-8 form-container">
+                <form id="createSentenceForm">
+                    <input type="text" id="newSentence" required>
+                    <button type="button" onclick="createNewSentence()">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+        let selectedCategoryId; // Variable to store the selected category ID
+
+        function showSentences(categoryId) {
+    // Store the selected category ID
+    selectedCategoryId = categoryId;
+
+    // Make an AJAX request to the Django view
+    fetch(`/${categoryId}/`)
+        .then(response => response.json())
+        .then(data => {
+
+            const sentenceList = document.getElementById('sentence-list');
+            sentenceList.innerHTML = ''; // Clear previous content
+
+            data.user_inputs.forEach(userInput => {
+                const sentenceCard = document.createElement('div');
+                sentenceCard.classList.add('sentence-card');
+
+                // Create a colored square box based on sentiment
+                const sentimentBox = document.createElement('div');
+                sentimentBox.classList.add('sentiment-box');
+                sentimentBox.style.backgroundColor = getSentimentColor(userInput.sentiment_label);
+
+                // Assuming your model has 'text_content' and 'sentiment_result' fields
+                const textContent = document.createElement('div');
+                textContent.textContent = `Text Content: ${userInput.sentence}`;
+
+                const sentimentResult = document.createElement('div');
+                sentimentResult.textContent = `Sentiment Result: ${userInput.sentiment_label}`;
+
+                // Append elements to sentenceCard
+                sentenceCard.appendChild(textContent);
+                sentenceCard.appendChild(sentimentResult);
+                sentenceCard.appendChild(sentimentBox); // Add sentiment-box to the sentence-card
+
+                sentenceList.appendChild(sentenceCard);
+            });
+
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+
+
+function createNewSentence() {
+            const newSentenceInput = document.getElementById('newSentence');
+            const newSentence = newSentenceInput.value;
+            // Get the CSRF token from the cookie (you might need to adjust this based on your project setup)
+            const csrftoken = getCookie('csrftoken');
+
+            // Make an AJAX request to create a new sentence with the CSRF token
+            fetch(`/add_sentence/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({ newSentence: newSentence }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response if needed
+                    console.log('New sentence created:', data);
+                })
+                .catch(error => {
+                    console.error('Error creating new sentence:', error);
+                });
+
+            // Clear the input field after submission
+            newSentenceInput.value = '';
+        }
+
+        // Function to get the CSRF token from the cookie
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Check if this cookie string begins with the name we want
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+        function getSentimentColor(sentiment) {
+    switch (sentiment.toLowerCase()) {
+        case 'positive':
+            return 'green';
+        case 'negative':
+            return 'red';
+        case 'neutral':
+            return '#cccccc'; // Hash color for neutral
+        default:
+            return '#cccccc'; // Default to hash color for unknown sentiments
+    }
+}
+
+
+</script>
+
+</body>
+</html>
