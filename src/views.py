@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from transformers import pipeline
 from .models import UserInput, Category
 from django.core.serializers.json import DjangoJSONEncoder
@@ -44,6 +45,7 @@ def create_category(request):
     return render(request, 'category_new.html', {'form': form})
 
 
+@csrf_exempt
 def add_sentence(request):
     if request.method == 'POST':
         data = json.loads(request.body)
