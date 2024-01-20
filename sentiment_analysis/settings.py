@@ -78,16 +78,13 @@ WSGI_APPLICATION = 'sentiment_analysis.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.parse('postgres://sentiment_analysis_db_user:1gb7ppmWkxyPPIG8z2ErWgys8QDhXhSr@dpg-cml5nr7109ks73a6bdr0-a.oregon-postgres.render.com/sentiment_analysis_db')
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
