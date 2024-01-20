@@ -64,13 +64,18 @@ def add_sentence(request):
                     sentence=sentence,
                     category=category_instance,
                     sentiment_label=sentiment_label,
-                    sentiment_score=sentiment_score
+                    sentiment_score=score
                 )
+            else:
+                category_instance = Category.objects.get(name='Politics')
 
-        return JsonResponse({"suceess": True, "status_code": 200})
+                return JsonResponse({"success": False, "status_code": 200, "category_id": category_instance.id, "msg": "Category not available"})
+
+
+        return JsonResponse({"success": True, "status_code": 200, "category_id": category_instance.id})
     else:
 
-        return JsonResponse({"suceess": False, "status_code": 500})
+        return JsonResponse({"success": False, "status_code": 500})
 
 
 def category_detail(request, category_id):

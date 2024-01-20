@@ -41,16 +41,16 @@ background-color:#DCD7D6;
         text-align: center;
     }
 
-    #loadingSpinner::before {
-        content: "";
-        border: 4px solid #ccc;
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        display: inline-block;
-        animation: spin 1s linear infinite;
-    }
+<!--    #loadingSpinner::before {-->
+<!--        content: "";-->
+<!--        border: 4px solid #ccc;-->
+<!--        border-top: 4px solid #3498db;-->
+<!--        border-radius: 50%;-->
+<!--        width: 20px;-->
+<!--        height: 20px;-->
+<!--        display: inline-block;-->
+<!--        animation: spin 1s linear infinite;-->
+<!--    }-->
 
     @keyframes spin {
         0% { transform: rotate(0deg); }
@@ -98,15 +98,50 @@ background-color:#DCD7D6;
                 </div>
             </div>
 
-            <div class="col-md-8 form-container">
-                <form id="createSentenceForm">
-                    <input type="text" id="newSentence" required>
-                    <button type="button" onclick="createNewSentence()">Submit</button>
-                    <div id="loadingSpinner" style="display: none;">
-        Loading...
-    </div>
-                </form>
+<div class="col-md-8 form-container position-relative">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Create Sentence</h2>
+
+            <form id="createSentenceForm">
+                <div class="input-group mb-3">
+                    <input type="text" id="newSentence" class="form-control" placeholder="Enter your sentence" required>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary" onclick="createNewSentence()" id="submitButton">Submit</button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="loadingSpinner" class="text-center position-absolute" style="top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.7); display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p>Loading...</p>
             </div>
+        </div>
+    </div>
+</div>
+
+
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
         </div>
     </div>
@@ -162,10 +197,14 @@ background-color:#DCD7D6;
 function createNewSentence() {
             const newSentenceInput = document.getElementById('newSentence');
             const newSentence = newSentenceInput.value;
+                const submitButton = document.getElementById('submitButton');
+
             const csrftoken = getCookie('csrftoken');
+                submitButton.disabled = true;
+
 
                 const loadingSpinner = document.getElementById('loadingSpinner');
-    loadingSpinner.style.display = 'inline-block';
+                loadingSpinner.style.display = 'block';
             fetch(`/add_sentence/`, {
                 method: 'POST',
                 headers: {
@@ -178,13 +217,25 @@ function createNewSentence() {
                 .then(data => {
                     console.log('New sentence created:', data);
                                 loadingSpinner.style.display = 'none';
-                                 showSentences(selectedCategoryId);
+                                        submitButton.disabled = false;
+                                 showSentences(data['category_id']);
+
+                                  if (data.success) {
+            // Item added successfully, update sentence list using AJAX
+            showSentences(selectedCategoryId ?? 1);
+        } else {
+            // Show error modal
+            document.getElementById('errorMessage').innerText = data.msg;
+            $('#errorModal').modal('show');
+        }
 
 
                 })
                 .catch(error => {
                     console.error('Error creating new sentence:', error);
                                 loadingSpinner.style.display = 'none';
+                                        submitButton.disabled = false;
+
 
                 });
 
