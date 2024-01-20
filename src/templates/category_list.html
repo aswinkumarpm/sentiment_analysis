@@ -32,7 +32,17 @@ background-color:#DCD7D6;
             margin-right: 10px;
             display: inline-block;
         }
+#loadingSpinner {
+        display: none;
+        margin-top: 10px;
+        font-size: 16px;
+        color: #333;
+    }
 
+    .loading-spinner-container {
+        display: flex;
+        align-items: center;
+    }
     </style>
 </head>
 <body>
@@ -73,6 +83,9 @@ background-color:#DCD7D6;
                 <form id="createSentenceForm">
                     <input type="text" id="newSentence" required>
                     <button type="button" onclick="createNewSentence()">Submit</button>
+                    <div id="loadingSpinner" style="display: none;">
+        Loading...
+    </div>
                 </form>
             </div>
 
@@ -90,7 +103,6 @@ background-color:#DCD7D6;
         let selectedCategoryId; // Variable to store the selected category ID
 
         function showSentences(categoryId) {
-    // Store the selected category ID
     selectedCategoryId = categoryId;
 
     // Make an AJAX request to the Django view
@@ -99,28 +111,25 @@ background-color:#DCD7D6;
         .then(data => {
 
             const sentenceList = document.getElementById('sentence-list');
-            sentenceList.innerHTML = ''; // Clear previous content
+            sentenceList.innerHTML = '';
 
             data.user_inputs.forEach(userInput => {
                 const sentenceCard = document.createElement('div');
                 sentenceCard.classList.add('sentence-card');
 
-                // Create a colored square box based on sentiment
                 const sentimentBox = document.createElement('div');
                 sentimentBox.classList.add('sentiment-box');
                 sentimentBox.style.backgroundColor = getSentimentColor(userInput.sentiment_label);
 
-                // Assuming your model has 'text_content' and 'sentiment_result' fields
                 const textContent = document.createElement('div');
                 textContent.textContent = `Text Content: ${userInput.sentence}`;
 
                 const sentimentResult = document.createElement('div');
                 sentimentResult.textContent = `Sentiment Result: ${userInput.sentiment_label}`;
 
-                // Append elements to sentenceCard
                 sentenceCard.appendChild(textContent);
                 sentenceCard.appendChild(sentimentResult);
-                sentenceCard.appendChild(sentimentBox); // Add sentiment-box to the sentence-card
+                sentenceCard.appendChild(sentimentBox);
 
                 sentenceList.appendChild(sentenceCard);
             });
@@ -135,10 +144,11 @@ background-color:#DCD7D6;
 function createNewSentence() {
             const newSentenceInput = document.getElementById('newSentence');
             const newSentence = newSentenceInput.value;
-            // Get the CSRF token from the cookie (you might need to adjust this based on your project setup)
             const csrftoken = getCookie('csrftoken');
 
-            // Make an AJAX request to create a new sentence with the CSRF token
+            const loadingSpinner = document.getElementById('loadingSpinner');
+    loadingSpinner.style.display = 'inline-block';
+
             fetch(`/add_sentence/`, {
                 method: 'POST',
                 headers: {
@@ -149,25 +159,27 @@ function createNewSentence() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    // Handle the response if needed
+
+                            loadingSpinner.style.display = 'none';
+                    showSentences(selectedCategoryId);
+
                     console.log('New sentence created:', data);
                 })
                 .catch(error => {
                     console.error('Error creating new sentence:', error);
+                                loadingSpinner.style.display = 'none';
+
                 });
 
-            // Clear the input field after submission
             newSentenceInput.value = '';
         }
 
-        // Function to get the CSRF token from the cookie
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {
                     var cookie = cookies[i].trim();
-                    // Check if this cookie string begins with the name we want
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
@@ -185,9 +197,9 @@ function createNewSentence() {
         case 'negative':
             return 'red';
         case 'neutral':
-            return '#cccccc'; // Hash color for neutral
+            return '#cccccc';
         default:
-            return '#cccccc'; // Default to hash color for unknown sentiments
+            return '#cccccc';
     }
 }
 

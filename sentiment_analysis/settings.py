@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-nd1ucd@b_cxc$$t($4t@6%xx!j&wa1(^hwr8wai2=!b=wdt)u$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['51.20.43.120']
 
 
 # Application definition
@@ -85,6 +85,9 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': dj_database_url.parse('postgres://sentiment_analysis_db_user:1gb7ppmWkxyPPIG8z2ErWgys8QDhXhSr@dpg-cml5nr7109ks73a6bdr0-a.oregon-postgres.render.com/sentiment_analysis_db')
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

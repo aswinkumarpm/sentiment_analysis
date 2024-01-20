@@ -10,22 +10,14 @@ from django.http import HttpResponse
 
 
 def download_category_csv(request, category_name):
-    # Get UserInput instances for the specified category
     user_inputs = UserInput.objects.filter(category__name=category_name)
-
-
-
-    # Create a CSV response
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = f'attachment; filename="{category_name}_sentiments.csv"'
 
-    # Create a CSV writer
     csv_writer = csv.writer(response)
 
-    # Write header
     csv_writer.writerow(['Serial number', 'Review', 'Sentiment'])
 
-    # Write data
     for index, user_input in enumerate(user_inputs, start=1):
         csv_writer.writerow([index, user_input.sentence, user_input.sentiment_label])
 
@@ -49,7 +41,6 @@ def add_sentence(request):
         data = json.loads(request.body)
         sentence = data.get('newSentence')
         categories = list(Category.objects.all().values_list('name', flat=True))
-
 
         classifier = pipeline("zero-shot-classification")
 
