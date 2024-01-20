@@ -42,7 +42,6 @@ def add_sentence(request):
         sentence = data.get('newSentence')
         categories = list(Category.objects.all().values_list('name', flat=True))
 
-
         classifier = pipeline("zero-shot-classification")
 
         result = classifier(sentence, categories)
@@ -58,7 +57,7 @@ def add_sentence(request):
 
         for label, score in zip(result['labels'], result['scores']):
             print(f"- {label} -{score}")
-            if score > 0.5 :
+            if score > 0.5:
                 category_instance = Category.objects.get(name=label)
 
                 UserInput.objects.create(
@@ -68,9 +67,11 @@ def add_sentence(request):
                     sentiment_score=sentiment_score
                 )
 
-        return redirect('category_list')
+        return JsonResponse({"suceess": True, "status_code": 200})
+    else:
 
-    return render(request, 'category_list.html')
+        return JsonResponse({"suceess": False, "status_code": 500})
+
 
 def category_detail(request, category_id):
     user_inputs = UserInput.objects.filter(category=category_id).values()
@@ -81,5 +82,3 @@ def category_detail(request, category_id):
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'category_list.html', {'categories': categories})
-
-
