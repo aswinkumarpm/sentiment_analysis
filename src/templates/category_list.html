@@ -187,6 +187,8 @@ function createNewSentence() {
                     // Handle the response if needed
                     console.log('New sentence created:', data);
                                 loadingSpinner.style.display = 'none';
+                                 showSentences(selectedCategoryId);
+
 
                 })
                 .catch(error => {
