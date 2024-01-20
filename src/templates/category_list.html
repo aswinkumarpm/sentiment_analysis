@@ -41,17 +41,6 @@ background-color:#DCD7D6;
         text-align: center;
     }
 
-<!--    #loadingSpinner::before {-->
-<!--        content: "";-->
-<!--        border: 4px solid #ccc;-->
-<!--        border-top: 4px solid #3498db;-->
-<!--        border-radius: 50%;-->
-<!--        width: 20px;-->
-<!--        height: 20px;-->
-<!--        display: inline-block;-->
-<!--        animation: spin 1s linear infinite;-->
-<!--    }-->
-
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -122,25 +111,6 @@ background-color:#DCD7D6;
     </div>
 </div>
 
-
-            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="errorModalLabel">Error</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="errorMessage"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
         </div>
@@ -218,16 +188,9 @@ function createNewSentence() {
                     console.log('New sentence created:', data);
                                 loadingSpinner.style.display = 'none';
                                         submitButton.disabled = false;
-                                 showSentences(data['category_id']);
 
-                                  if (data.success) {
-            // Item added successfully, update sentence list using AJAX
-            showSentences(selectedCategoryId ?? 1);
-        } else {
-            // Show error modal
-            document.getElementById('errorMessage').innerText = data.msg;
-            $('#errorModal').modal('show');
-        }
+
+                                 showSentences(data['category_id']);
 
 
                 })

@@ -69,9 +69,6 @@ def add_sentence(request):
             else:
                 category_instance = Category.objects.get(name='Politics')
 
-                return JsonResponse({"success": False, "status_code": 200, "category_id": category_instance.id, "msg": "Category not available"})
-
-
         return JsonResponse({"success": True, "status_code": 200, "category_id": category_instance.id})
     else:
 
