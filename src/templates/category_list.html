@@ -51,7 +51,6 @@ background-color:#DCD7D6;
         align-items: center;
     }
 
-
     </style>
 </head>
 <body>
@@ -62,12 +61,12 @@ background-color:#DCD7D6;
 
             {% for category in categories %}
             <div class="category-card" onclick="showSentences({{ category.id }})">
-                <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
 
-                    <span>{{ category.name }}</span>
-                    <button><a href="{% url 'download_category_csv' category.name %}">Download CSV</a></button>
+                <span>{{ category.name }}</span>
+        <button><a href="{% url 'download_category_csv' category.name %}">Download CSV</a></button>
 
-                </div>
+            </div>
             </div>
 
             {% endfor %}
@@ -88,74 +87,68 @@ background-color:#DCD7D6;
                 </div>
             </div>
 
-            <div class="col-md-8 form-container position-relative">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">Create Sentence</h2>
+<div class="col-md-8 form-container position-relative">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Create Sentence</h2>
 
-                        <form id="createSentenceForm">
-                            <div class="input-group mb-3">
-                                <input type="text" id="newSentence" class="form-control"
-                                       placeholder="Enter your sentence" required>
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" onclick="createNewSentence()"
-                                            id="submitButton">Submit
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
-                        <div id="loadingSpinner" class="text-center position-absolute"
-                             style="top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.7); display: none;">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                            <p>Loading...</p>
-                        </div>
+            <form id="createSentenceForm">
+                <div class="input-group mb-3">
+                    <input type="text" id="newSentence" class="form-control" placeholder="Enter your sentence" required>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary" onclick="createNewSentence()" id="submitButton">Submit</button>
                     </div>
                 </div>
-            </div>
+            </form>
 
-
-            <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="successModalLabel">Success</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p id="successMessage"></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
+            <div id="loadingSpinner" class="text-center position-absolute" style="top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.7); display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
                 </div>
+                <p>Loading...</p>
             </div>
+        </div>
+    </div>
+</div>
 
-            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="errorModalLabel">Error</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p id="errorMessage"></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                <p id="successMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
         </div>
@@ -288,7 +281,6 @@ function createNewSentence() {
             return '#cccccc';
     }
 }
-
 
 
 </script>
