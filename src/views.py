@@ -55,23 +55,27 @@ def add_sentence(request):
         print(sentiment_label)
         print(sentiment_score)
 
+        matching_categories = []
+        matching_category_ids = []
+
         for label, score in zip(result['labels'], result['scores']):
             print(f"- {label} -{score}")
             if score > 0.5:
                 category_instance = Category.objects.get(name=label)
-
+                matching_categories.append(label)
+                matching_category_ids.append(category_instance.id)
                 UserInput.objects.create(
                     sentence=sentence,
                     category=category_instance,
                     sentiment_label=sentiment_label,
                     sentiment_score=score
                 )
-            else:
-                category_instance = Category.objects.get(name='Politics')
 
-        return JsonResponse({"success": True, "status_code": 200, "category_id": category_instance.id})
+        if matching_categories:
+            return JsonResponse({"success": True, "status_code": 200, "category_id": matching_category_ids[0], "msg": "Given Sentence Classified"})
+        else:
+            return JsonResponse({"success": False, "status_code": 500, "msg": "No matching categories found. Redirecting to first Category page", "category_id": 1 })
     else:
-
         return JsonResponse({"success": False, "status_code": 500})
 
 
