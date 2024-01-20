@@ -33,6 +33,35 @@ background-color:#DCD7D6;
             display: inline-block;
         }
 
+         #loadingSpinner {
+        display: none;
+        margin-top: 10px;
+        font-size: 16px;
+        color: #333;
+        text-align: center;
+    }
+
+    #loadingSpinner::before {
+        content: "";
+        border: 4px solid #ccc;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-spinner-container {
+        display: flex;
+        align-items: center;
+    }
+
     </style>
 </head>
 <body>
@@ -73,6 +102,9 @@ background-color:#DCD7D6;
                 <form id="createSentenceForm">
                     <input type="text" id="newSentence" required>
                     <button type="button" onclick="createNewSentence()">Submit</button>
+                    <div id="loadingSpinner" style="display: none;">
+        Loading...
+    </div>
                 </form>
             </div>
 
@@ -138,6 +170,9 @@ function createNewSentence() {
             // Get the CSRF token from the cookie (you might need to adjust this based on your project setup)
             const csrftoken = getCookie('csrftoken');
 
+                const loadingSpinner = document.getElementById('loadingSpinner');
+    loadingSpinner.style.display = 'inline-block';
+
             // Make an AJAX request to create a new sentence with the CSRF token
             fetch(`/add_sentence/`, {
                 method: 'POST',
@@ -151,9 +186,13 @@ function createNewSentence() {
                 .then(data => {
                     // Handle the response if needed
                     console.log('New sentence created:', data);
+                                loadingSpinner.style.display = 'none';
+
                 })
                 .catch(error => {
                     console.error('Error creating new sentence:', error);
+                                loadingSpinner.style.display = 'none';
+
                 });
 
             // Clear the input field after submission
