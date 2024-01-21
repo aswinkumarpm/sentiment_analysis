@@ -1,40 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Create Category</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body class="bg-light">
+{% block content %}
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title">Create Category</h2>
+<div class="bg-light">
 
-                    <form method="post" action="{% url 'create_category' %}">
-                        {% csrf_token %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Create Category</h2>
 
-                        <div class="form-group">
-                            {{ form.label_tag }}
-                            {{ form }}
-                        </div>
+                        <form method="post" action="{% url 'create_category' %}">
+                            {% csrf_token %}
 
-                        <button type="submit" class="btn btn-primary">Create Category</button>
-                    </form>
+                            <div class="form-group">
+                                {{ form.label_tag }}
+                                {{ form }}
+                            </div>
 
-                    <a href="{% url 'category_list' %}" class="btn btn-secondary mt-2">Back to Category List</a>
+                            <button type="submit" class="btn btn-primary">Create Category</button>
+                        </form>
+
+                        <a href="{% url 'category_list' %}" class="btn btn-secondary mt-2">Back to Category List</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+
 </div>
+{% endblock %}
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-</body>
-</html>
