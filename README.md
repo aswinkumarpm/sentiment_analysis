@@ -15,5 +15,6 @@ Steps
 8. pushed my db for testing purposes
 9. other wise , need to connect other databases,  please remove the database and create makemigrations and migrate . Also inorder to connect your db do the changes in settings.py
 
+
 This is the AWS hosted URL 
    http://51.20.43.120:8000/
