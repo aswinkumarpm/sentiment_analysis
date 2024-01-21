@@ -1,0 +1,44 @@
+  .category-list, .sentence-list, .form-container {
+            padding: 20px;
+        }
+
+        .category-card {
+
+        background-color:#85C1E9;
+
+        }
+
+        .category-list {
+background-color:#DCD7D6;
+        }
+
+        .category-card, .sentence-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+         .sentiment-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+         #loadingSpinner {
+        display: none;
+        margin-top: 10px;
+        font-size: 16px;
+        color: #333;
+        text-align: center;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-spinner-container {
+        display: flex;
+        align-items: center;
+    }
